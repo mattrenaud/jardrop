@@ -4,8 +4,7 @@
   <div>
     <div
       :class="['file-row','d-flex','align-items-center',{dir: dir, open: open}]"
-      @click="toggle"
-      @dblclick="dump">
+      @click="toggle">
       <span :class="['d-flex','align-items-center', iconsClass,'leaf-icon']"></span>
       <span>{{ name }}</span>
     </div>
@@ -18,6 +17,12 @@
       :dir="leafData.dir"
       :zipObj="leafData.zipObj"
       :children="leafData.children"/>
+    <ContentModel
+      v-if="!dir && open"
+      @close="toggle"
+      :name="name"
+      :zipObj="zipObj">
+    </ContentModel>
   </div>
 </template>
 
@@ -26,9 +31,10 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import icon from "file-icons-js";
+import ContentModel from "./ContentModel.vue";
 
 @Component({
-  components: { Leaf },
+  components: { Leaf, ContentModel },
   props: {
     name: String,
     dir: Boolean,
@@ -46,13 +52,6 @@ export default class Leaf extends Vue {
   toggle() {
     this.open = !this.open;
   }
-  async dump() {
-    if (!this.zipObj) {
-      return;
-    }
-    const blob = await this.zipObj.async("text");
-    console.log("blob", blob);
-  }
 }
 </script>
 
@@ -62,9 +61,6 @@ export default class Leaf extends Vue {
   cursor: pointer;
   text-align: left;
   margin-left: 20px;
-}
-.leaf:hover {
-  text-decorator: underline;
 }
 .bold {
   font-weight: bold;

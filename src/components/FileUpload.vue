@@ -29,10 +29,9 @@
               <label for="file"><strong>Choose a file</strong><span class=""> or drag it here</span>.</label>
             </div>
         </form>
-        <Tree :roots="files" class="tree-root" @remove="removeFile"/>
+        <Tree v-if="files.length" :roots="files" class="tree-root" @remove="removeFile"/>
       </div>
   </div>
-
 </template>
 
 <!-- Javascript -->
